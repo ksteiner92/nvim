@@ -58,14 +58,14 @@ return packer.startup(function(use)
     end
   }
 
-  -- Icons
-  use 'kyazdani42/nvim-web-devicons'
-
   -- Tag viewer
   use 'preservim/tagbar'
 
   -- Treesitter interface
   use 'nvim-treesitter/nvim-treesitter'
+
+
+  use "williamboman/nvim-lsp-installer"
 
   -- Color schemes
   use 'navarasu/onedark.nvim'
@@ -73,7 +73,12 @@ return packer.startup(function(use)
   use { 'rose-pine/neovim', as = 'rose-pine' }
 
   -- LSP
-  use 'neovim/nvim-lspconfig'
+  use {
+    "neovim/nvim-lspconfig",
+    config = function()
+      require("nvim-lsp-installer").setup()
+    end,
+  }
 
   -- Autocomplete
   use {
@@ -106,6 +111,58 @@ return packer.startup(function(use)
   use {
     'goolord/alpha-nvim',
     requires = { 'kyazdani42/nvim-web-devicons' },
+  }
+
+  -- WhichKey
+  use {
+    "folke/which-key.nvim",
+    event = "VimEnter",
+    config = function()
+      require("config.whichkey").setup()
+    end,
+  }
+
+  -- Better icons
+  use {
+    "kyazdani42/nvim-web-devicons",
+    module = "nvim-web-devicons",
+    config = function()
+      require("nvim-web-devicons").setup { default = true }
+    end,
+  }
+
+  -- vimspector
+  use {
+    "puremourning/vimspector",
+    cmd = { "VimspectorInstall", "VimspectorUpdate" },
+    fn = { "vimspector#Launch()", "vimspector#ToggleBreakpoint", "vimspector#Continue" },
+    config = function()
+      require("config.vimspector").setup()
+    end,
+  }
+
+  use { "easymotion/vim-easymotion" }
+
+
+  use {
+    "phaazon/hop.nvim",
+    cmd = { "HopWord", "HopChar1" },
+    config = function()
+      require("hop").setup {}
+    end,
+  }
+
+
+  -- FZF
+  use { "junegunn/fzf", run = "./install --all", event = "VimEnter", disable = false }
+  use { "junegunn/fzf.vim", event = "BufEnter", disable = false }
+
+  -- FZF Lua
+  use {
+    "ibhagwan/fzf-lua",
+    event = "BufEnter",
+    wants = "nvim-web-devicons",
+    requires = { "junegunn/fzf", run = "./install --all" },
   }
 
   -- Automatically set up your configuration after cloning packer.nvim
